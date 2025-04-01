@@ -7,7 +7,6 @@
 1. Make sure [Docker](https://www.docker.com/) is installed and running
 2. Make sure [sqlx cli](https://crates.io/crates/sqlx-cli) is installed
 3. Create a `.env` file. This file will store environment variables. Specifically, `DATABASE_URL` and `POSTGRES_PASSWORD`. It should look like this:
-4. Update `docker-compose.yml` and change `letsgetrusty` to your own Docker Hub username.
 
 ## Run Locally
 

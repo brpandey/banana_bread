@@ -50,11 +50,9 @@ jobs:
       uses: docker/bake-action@v2.3.0
       with:
         push: true
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-          # set: |
-          # *.cache-from=type=gha
-          # *.cache-to=type=gha,mode=max
+        set: |
+          *.cache-from=type=gha
+          *.cache-to=type=gha,mode=max
 
   deploy: # job 2, pull latest images from docker hub and deploys them
     needs: build
@@ -85,6 +83,6 @@ jobs:
         script: |
           cd ~
           export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          docker-compose down
-          docker-compose pull
-          docker-compose up -d
+          docker compose down
+          docker compose pull
+          docker compose up -d
