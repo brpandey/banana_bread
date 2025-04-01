@@ -142,6 +142,6 @@ mod tests {
         let body = axum::body::to_bytes(response.into_body(), mb)
             .await
             .unwrap();
-        assert_eq!(&body[..], b"Banana Bread Cooks!");
+        assert_eq!(&body[..], b"Banana Bread Customers!");
     }
 }
