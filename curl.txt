@@ -1,0 +1,14 @@
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"name":"Eureka Waters","email":"ewaters@xyz.com"}' \
+  http://localhost:3000/user
+                                                                                             
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"name":"Mary Atkins","email":"matkins87@hitmeup.com"}' \
+  http://localhost:3000/user
+                                                                                             
+curl --request GET http://localhost:3000/
+
+curl --request GET http://localhost:3000/users
+
