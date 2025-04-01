@@ -10,6 +10,7 @@ use dotenvy::dotenv;
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
+use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -29,8 +30,10 @@ async fn main() -> anyhow::Result<()> {
 
     println!("listening on {}", addr);
 
-    axum::Server::bind(&addr)
-        .serve(app().layer(Extension(pool)).into_make_service())
+    let app = app().layer(Extension(pool)); // Apply necessary layers, like pool
+    let listener = TcpListener::bind(addr).await.unwrap();
+
+    axum::serve(listener, app.into_make_service())
         .await
         .unwrap();
 
@@ -53,7 +56,7 @@ fn app() -> Router {
         .route("/", get(handler))
         .route("/user", post(create_user))
         .route("/users", get(get_users))
-        .route("/user/:id", delete(delete_user))
+        .route("/user/{id}", delete(delete_user))
 }
 
 async fn handler() -> &'static str {
@@ -134,8 +137,11 @@ mod tests {
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::OK);
+        let mb: usize = 1_000_000;
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
+        let body = axum::body::to_bytes(response.into_body(), mb)
+            .await
+            .unwrap();
         assert_eq!(&body[..], b"Banana Bread Cooks!");
     }
 }
